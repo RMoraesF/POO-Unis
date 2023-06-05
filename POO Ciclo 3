@@ -1,0 +1,74 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class IMCCalculator extends JFrame {
+    private JTextField pesoTextField;
+    private JTextField alturaTextField;
+    private JLabel resultadoLabel;
+
+    public IMCCalculator() {
+        setTitle("Calculadora de IMC");
+        setSize(300, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new GridLayout(3, 2, 10, 10));
+
+        JLabel pesoLabel = new JLabel("Peso (Kg):");
+        pesoTextField = new JTextField();
+        JLabel alturaLabel = new JLabel("Altura (Cm):");
+        alturaTextField = new JTextField();
+        JButton calcularButton = new JButton("Calcular");
+        calcularButton.addActionListener(new CalcularListener());
+        resultadoLabel = new JLabel();
+
+        mainPanel.add(pesoLabel);
+        mainPanel.add(pesoTextField);
+        mainPanel.add(alturaLabel);
+        mainPanel.add(alturaTextField);
+        mainPanel.add(calcularButton);
+        mainPanel.add(resultadoLabel);
+
+        add(mainPanel);
+    }
+
+    private class CalcularListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            double peso = Double.parseDouble(pesoTextField.getText());
+            double altura = Double.parseDouble(alturaTextField.getText());
+
+            double imc = peso / Math.pow(altura / 100, 2);
+
+            String resultado;
+            if (imc < 17) {
+                resultado = "Muito abaixo do peso";
+            } else if (imc < 18.5) {
+                resultado = "Abaixo do peso";
+            } else if (imc < 25) {
+                resultado = "Peso normal";
+            } else if (imc < 30) {
+                resultado = "Acima do peso";
+            } else if (imc < 35) {
+                resultado = "Obesidade I";
+            } else if (imc < 40) {
+                resultado = "Obesidade II (severa)";
+            } else {
+                resultado = "Obesidade III (mórbida)";
+            }
+
+            resultadoLabel.setText("Seu IMC é: " + String.format("%.2f", imc) + " - " + resultado);
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                IMCCalculator calculator = new IMCCalculator();
+                calculator.setVisible(true);
+            }
+        });
+    }
+}
